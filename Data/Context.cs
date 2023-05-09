@@ -39,17 +39,84 @@ namespace TimeReportAPI.Data
 
             // Add time reports for each employee
             modelBuilder.Entity<TimeReport>().HasData(
-                new TimeReport { TimeReportID = 1, Hours = 20, EmployeeID = 1 },
-                new TimeReport { TimeReportID = 2, Hours = 30, EmployeeID = 2 },
-                new TimeReport { TimeReportID = 3, Hours = 40, EmployeeID = 3 },
-                new TimeReport { TimeReportID = 4, Hours = 25, EmployeeID = 4 },
-                new TimeReport { TimeReportID = 5, Hours = 35, EmployeeID = 5 },
-                new TimeReport { TimeReportID = 6, Hours = 30, EmployeeID = 6 },
-                new TimeReport { TimeReportID = 7, Hours = 20, EmployeeID = 7 },
-                new TimeReport { TimeReportID = 8, Hours = 15, EmployeeID = 8 },
-                new TimeReport { TimeReportID = 9, Hours = 10, EmployeeID = 9 },
-                new TimeReport { TimeReportID = 10, Hours = 20, EmployeeID = 10 },
-                new TimeReport { TimeReportID = 11, Hours = 25, EmployeeID = 11 }
+                new TimeReport
+                {
+                    TimeReportID = 1,
+                    EmployeeID = 1,
+                    StartTime = new DateTime(2023, 4, 8, 8, 0, 0),
+                    EndTime = new DateTime(2023, 4, 8, 16, 0, 0)
+                },
+
+                new TimeReport
+                {
+                    TimeReportID = 2,
+                    EmployeeID = 2,
+                    StartTime = new DateTime(2023, 4, 9, 8, 0, 0),
+                    EndTime = new DateTime(2023, 4, 9, 13, 0, 0)
+                },
+                new TimeReport
+                {
+                    TimeReportID = 3,
+                    EmployeeID = 3,
+                    StartTime = new DateTime(2023, 4, 10, 8, 0, 0),
+                    EndTime = new DateTime(2023, 4, 10, 18, 0, 0)
+                },
+                new TimeReport
+                {
+                    TimeReportID = 4,
+                    EmployeeID = 4,
+                    StartTime = new DateTime(2023, 4, 11, 6, 0, 0),
+                    EndTime = new DateTime(2023, 4, 11, 12, 0, 0)
+                },
+                new TimeReport
+                {
+                    TimeReportID = 5,
+                    EmployeeID = 5,
+                    StartTime = new DateTime(2023, 4, 12, 8, 0, 0),
+                    EndTime = new DateTime(2023, 4, 12, 16, 0, 0)
+                },
+                new TimeReport
+                {
+                    TimeReportID = 6,
+                    EmployeeID = 6,
+                    StartTime = new DateTime(2023, 4, 13, 8, 0, 0),
+                    EndTime = new DateTime(2023, 4, 13, 17, 0, 0)
+                },
+                new TimeReport
+                {
+                    TimeReportID = 7,
+                    EmployeeID = 7,
+                    StartTime = new DateTime(2023, 4, 14, 6, 0, 0),
+                    EndTime = new DateTime(2023, 4, 14, 14, 0, 0)
+                },
+                new TimeReport
+                {
+                    TimeReportID = 8,
+                    EmployeeID = 8,
+                    StartTime = new DateTime(2023, 4, 14, 6, 0, 0),
+                    EndTime = new DateTime(2023, 4, 28, 16, 0, 0)
+                },
+                new TimeReport
+                {
+                    TimeReportID = 9,
+                    EmployeeID = 9,
+                    StartTime = new DateTime(2023, 4, 28, 6, 0, 0),
+                    EndTime = new DateTime(2023, 4, 28, 19, 0, 0)
+                },
+                new TimeReport
+                {
+                    TimeReportID = 10,
+                    EmployeeID = 10,
+                    StartTime = new DateTime(2023, 4, 28, 9, 0, 0),
+                    EndTime = new DateTime(2023, 4, 28, 15, 0, 0)
+                },
+                new TimeReport
+                {
+                    TimeReportID = 11,
+                    EmployeeID = 11,
+                    StartTime = new DateTime(2023, 4, 28, 9, 0, 0),
+                    EndTime = new DateTime(2023, 4, 28, 18, 0, 0)
+                }
             );
 
             // Add project employees

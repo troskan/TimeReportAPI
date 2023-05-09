@@ -1,4 +1,4 @@
-﻿namespace TimeReportAPI.Repositories
+﻿namespace TimeReportAPI.Repositories.Interfaces
 {
     public interface ITimeReport<T>
     {

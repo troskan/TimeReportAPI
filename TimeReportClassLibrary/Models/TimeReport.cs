@@ -12,7 +12,9 @@ namespace TimeReportClassLibrary.Models
         [Key]
         public int TimeReportID { get; set; }
         [Required]
-        public int Hours { get; set; }
+        public DateTime StartTime { get; set; }
+        [Required]
+        public DateTime EndTime { get; set; }
         [Required]
         public int EmployeeID { get; set; }
         [Required]

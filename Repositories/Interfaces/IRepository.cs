@@ -17,6 +17,5 @@
         //Add
         Task<T> Add(T entity);
 
-
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace TimeReportAPI.Repositories.Interfaces
 {
-    public interface ITimeReport<T>
+    public interface IRepository<T>
     {
         //Get All
         Task<IEnumerable<T>> GetAll();

@@ -18,17 +18,17 @@ namespace TimeReportAPI.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Employee>().HasData(
-    new Employee { EmployeeID = 1, FirstName = "Oskar", LastName = "Holm" },
-    new Employee { EmployeeID = 2, FirstName = "Emma", LastName = "Larsson" },
-    new Employee { EmployeeID = 3, FirstName = "Gustav", LastName = "Andersson" },
-    new Employee { EmployeeID = 4, FirstName = "Sara", LastName = "Johansson" },
-    new Employee { EmployeeID = 5, FirstName = "Erik", LastName = "Lindberg" },
-    new Employee { EmployeeID = 6, FirstName = "Maja", LastName = "Söderberg" },
-    new Employee { EmployeeID = 7, FirstName = "Johan", LastName = "Bergström" },
-    new Employee { EmployeeID = 8, FirstName = "Lisa", LastName = "Ekström" },
-    new Employee { EmployeeID = 9, FirstName = "Per", LastName = "Gustafsson" },
-    new Employee { EmployeeID = 10, FirstName = "Anna", LastName = "Björk" }
-);
+                new Employee { EmployeeID = 1, FirstName = "Oskar", LastName = "Holm" },
+                new Employee { EmployeeID = 2, FirstName = "Emma", LastName = "Larsson" },
+                new Employee { EmployeeID = 3, FirstName = "Gustav", LastName = "Andersson" },
+                new Employee { EmployeeID = 4, FirstName = "Sara", LastName = "Johansson" },
+                new Employee { EmployeeID = 5, FirstName = "Erik", LastName = "Lindberg" },
+                new Employee { EmployeeID = 6, FirstName = "Maja", LastName = "Söderberg" },
+                new Employee { EmployeeID = 7, FirstName = "Johan", LastName = "Bergström" },
+                new Employee { EmployeeID = 8, FirstName = "Lisa", LastName = "Ekström" },
+                new Employee { EmployeeID = 9, FirstName = "Per", LastName = "Gustafsson" },
+                new Employee { EmployeeID = 10, FirstName = "Anna", LastName = "Björk" }
+            );
 
             // Add 3 more projects
             modelBuilder.Entity<Project>().HasData(

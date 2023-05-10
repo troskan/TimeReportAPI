@@ -17,7 +17,7 @@ namespace TimeReportAPI.Repositories
         public async Task<Employee> Add(Employee entity)
         {
             if (entity.FirstName == null || entity.LastName == null) { return null; }
-            if (entity.FirstName.Length! > 1 || entity.FirstName.Length! > 1) { return null; }
+            if (entity.FirstName.Length < 2 || entity.LastName.Length < 2) { return null; }
 
             try
             {
@@ -98,14 +98,18 @@ namespace TimeReportAPI.Repositories
 
         public async Task<Employee> Update(Employee entity)
         {
-            if (entity.FirstName == null || entity.LastName == null) { return null; }
-            if (entity.FirstName.Length! > 1 || entity.FirstName.Length! > 1) { return null; }
+            //if (entity.FirstName == null || entity.LastName == null) { return null; }
+            //if (entity.FirstName.Length < 2 || entity.LastName.Length < 2) { return null; }
+            if (entity.EmployeeID == null || entity.EmployeeID == 0) { return null; }
 
             try
             {
                 var employeeToUpdate = await _db.Employees.FirstOrDefaultAsync(e=>e.EmployeeID == entity.EmployeeID);
                 employeeToUpdate.FirstName = entity.FirstName;
                 employeeToUpdate.LastName = entity.LastName;
+
+                await _db.SaveChangesAsync();
+
                 return entity;
 
             }

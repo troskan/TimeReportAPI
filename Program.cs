@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TimeReportAPI.Data;
 using TimeReportAPI.Repositories;
 using TimeReportAPI.Repositories.Interfaces;
+using TimeReportClassLibrary.Models;
 
 namespace TimeReportAPI
 {
@@ -13,13 +14,13 @@ namespace TimeReportAPI
 
             // Add services to the container.
 
-            builder.Services.AddScoped<ITimeReportRepository, TimeReportRepository>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            
-            
+            builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
+            builder.Services.AddScoped<ITimeReportRepository, TimeReportRepository>();
+
             builder.Services.AddDbContext<Context>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Connection"));

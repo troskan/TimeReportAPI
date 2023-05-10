@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="TimeReportClassLibrary\TimeReportClassLibrary.csproj" />
+    <ProjectReference Include=".\TimeReportClassLibrary\TimeReportClassLibrary.csproj" />
   </ItemGroup>
 
 </Project>

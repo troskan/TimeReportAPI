@@ -4,7 +4,7 @@ using TimeReportAPI.Repositories.Interfaces;
 namespace TimeReportAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class TimeReportController : ControllerBase
     {
         private readonly ITimeReportRepository _timeReportRepository;
@@ -14,7 +14,7 @@ namespace TimeReportAPI.Controllers
             _timeReportRepository = timeReportRepository;
         }
 
-        [HttpGet(Name = "GetHoursByWeekYearEmployee")]
+        [HttpGet("GetHoursByWeekYearEmployee")]
         public async Task<ActionResult<double>> GetHoursByWeekYearEmployee([FromQuery] int year, int week, int employeeId)
         {
             try

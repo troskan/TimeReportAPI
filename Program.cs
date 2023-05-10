@@ -19,6 +19,7 @@ namespace TimeReportAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
+            builder.Services.AddScoped<ITimeReportRepository, TimeReportRepository>();
 
             builder.Services.AddDbContext<Context>(options =>
             {

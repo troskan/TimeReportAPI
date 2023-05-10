@@ -10,7 +10,7 @@ namespace TimeReportAPI.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IRepository<Employee> _db;
-        public EmployeeController(IRepository<Employee> db )
+        public EmployeeController(IRepository<Employee> db)
         {
             _db = db;
         }
@@ -39,22 +39,46 @@ namespace TimeReportAPI.Controllers
             return Ok(employee);
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateUser(EmployeeDTO employeeDTO)
+        public async Task<IActionResult> AddEmployee(EmployeeDTO employeeDTO)
         {
             try
             {
                 var employee = new Employee();
                 employee.FirstName = employeeDTO.FirstName;
                 employee.LastName = employeeDTO.LastName;
-
+                return Ok(await _db.Add(employee));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding employee: {ex.Message}");
+                return BadRequest();
+            }
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateEmployee(Employee employee)
+        {
+            try
+            {
                 return Ok(await _db.Update(employee));
             }
             catch (Exception)
             {
                 return BadRequest();
             }
-            
         }
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteEmployee(int id)
+        {
+            try
+            {
+                return Ok(await _db.Delete(id));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        } 
+       
 
     }
 }

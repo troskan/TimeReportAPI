@@ -22,6 +22,7 @@ namespace TimeReportAPI
             builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeRepository<Employee>, EmployeeRepository>();
             builder.Services.AddScoped<ITimeReportRepository, TimeReportRepository>();
+            builder.Services.AddScoped<IRepository<TimeReport>, Repository<TimeReport>>();
 
             builder.Services.AddDbContext<Context>(options =>
             {

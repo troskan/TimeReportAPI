@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TimeReportAPI.DTO;
+using TimeReportAPI.Repositories;
 using TimeReportAPI.Repositories.Interfaces;
 using TimeReportClassLibrary.Models;
 
@@ -10,9 +11,18 @@ namespace TimeReportAPI.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IRepository<Employee> _db;
-        public EmployeeController(IRepository<Employee> db)
+        private readonly IEmployeeRepository<Employee> _EmpRepo;
+
+        public EmployeeController(IRepository<Employee> db, IEmployeeRepository<Employee> empRepo)
         {
             _db = db;
+            _EmpRepo = empRepo;
+        }
+        [HttpGet("GetEmployeesByProjectId/{id:int}")]
+        public async Task<IActionResult> GetEmployeesByProject(int id)
+        {
+            var employees = await _EmpRepo.GetEmployeesByProject(id);
+            return employees == null ? NotFound() : Ok(employees);
         }
         [HttpGet]
         public async Task<IActionResult> GetAll()

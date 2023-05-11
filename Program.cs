@@ -19,10 +19,11 @@ namespace TimeReportAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeRepository<Employee>, EmployeeRepository>();
 
             builder.Services.AddDbContext<Context>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("Connection"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Alvin"));
             });
 
             var app = builder.Build();

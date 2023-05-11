@@ -6,19 +6,29 @@ using TimeReportClassLibrary.Models;
 
 namespace TimeReportAPI.Repositories
 {
-    public class EmployeeRepository : IRepository<Employee>
+    public class EmployeeRepository : IRepository<Employee>, IEmployeeRepository<Employee>
     {
         private readonly Context _db;
         public EmployeeRepository(Context db) 
         {
             _db = db;
         }
+        public async Task<IEnumerable<Employee>> GetEmployeesByProject(int id)
+        {
+            var projects = from emp in _db.Employees
+                           join pe in _db.ProjectEmployees on emp.EmployeeID equals pe.EmployeeID
+                           where pe.EmployeeID == emp.EmployeeID
+                           join p in _db.Projects on pe.ProjectID equals p.ProjectID
+                           where id == p.ProjectID
+                           select emp;
 
+            return await projects.ToListAsync();
+        }
         public async Task<Employee> Add(Employee entity)
         {
             if (entity.FirstName == null || entity.LastName == null) { return null; }
             if (entity.FirstName.Length < 2 || entity.LastName.Length < 2) { return null; }
-
+            
             try
             {
                 await _db.AddAsync(entity);
@@ -95,6 +105,8 @@ namespace TimeReportAPI.Repositories
                 return null;
             }
         }
+
+
 
         public async Task<Employee> Update(Employee entity)
         {

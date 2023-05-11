@@ -87,8 +87,6 @@ namespace TimeReportAPI.Controllers
             {
                 return BadRequest();
             }
-        } 
-       
-
+        }       
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
 using TimeReportAPI.Data;
+using TimeReportAPI.DTO;
 using TimeReportAPI.Repositories.Interfaces;
 using TimeReportClassLibrary.Models;
 
@@ -13,6 +14,50 @@ namespace TimeReportAPI.Repositories
         {
             _db = db;
         }
+        public Task<ICollection<EmployeeTimeReportDTO>> GetTimeReportsByEmployee(int id)
+        {
+            var detailedTimeReports = from tr in _db.TimeReports
+                                      join emp in _db.Employees on tr.EmployeeID equals emp.EmployeeID
+                                      where tr.EmployeeID == id
+                                      join p in _db.Projects on tr.ProjectID equals p.ProjectID
+
+                                      select new
+                                      {
+                                          FirstName = emp.FirstName,
+                                          LastName = emp.LastName,
+                                          EmployeeID = emp.EmployeeID,
+                                          ProjectID = tr.ProjectID,
+                                          ProjectName = p.ProjectName,
+                                          StartTime = tr.StartTime,
+                                          EndTime = tr.EndTime
+                                      };
+
+            ICollection<EmployeeTimeReportDTO> listOfReports = new List<EmployeeTimeReportDTO>();
+            foreach (var i in detailedTimeReports)
+            {
+                var emp = new EmployeeTimeReportDTO();
+                emp.EmployeeID = i.EmployeeID;
+                emp.FirstName = i.FirstName;
+                emp.LastName = i.LastName;
+                emp.ProjectID = i.ProjectID;
+                emp.ProjectName = i.ProjectName;
+                emp.StartTime = i.StartTime;
+                emp.EndTime = i.EndTime;
+
+                listOfReports.Add(emp);
+            }
+            return listOfReports;
+            
+        }
+
+
+
+
+
+
+
+
+
         public async Task<IEnumerable<Employee>> GetEmployeesByProject(int id)
         {
             var projects = from emp in _db.Employees

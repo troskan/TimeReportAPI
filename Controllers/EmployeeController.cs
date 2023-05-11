@@ -24,6 +24,13 @@ namespace TimeReportAPI.Controllers
             var employees = await _EmpRepo.GetEmployeesByProject(id);
             return employees == null ? NotFound() : Ok(employees);
         }
+
+        [HttpGet("GetTimeReportByEmployeeId/{id:int}")]
+        public async Task<IActionResult> GetTimeReportsByEmployee(int id)
+        {
+            var employees = await _EmpRepo.GetTimeReportsByEmployee(id);
+            return employees == null ? NotFound() : Ok(employees);
+        }
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -56,6 +63,7 @@ namespace TimeReportAPI.Controllers
                 var employee = new Employee();
                 employee.FirstName = employeeDTO.FirstName;
                 employee.LastName = employeeDTO.LastName;
+
                 return Ok(await _db.Add(employee));
             }
             catch (Exception ex)

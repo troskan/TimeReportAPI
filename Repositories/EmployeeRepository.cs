@@ -14,51 +14,55 @@ namespace TimeReportAPI.Repositories
         {
             _db = db;
         }
-        public Task<ICollection<EmployeeTimeReportDTO>> GetTimeReportsByEmployee(int id)
+        public async Task<List<EmployeeTimeReportDTO>> GetTimeReportsByEmployee(int id)
         {
             var detailedTimeReports = from tr in _db.TimeReports
                                       join emp in _db.Employees on tr.EmployeeID equals emp.EmployeeID
                                       where tr.EmployeeID == id
                                       join p in _db.Projects on tr.ProjectID equals p.ProjectID
-
-                                      select new
+                                      select new EmployeeTimeReportDTO
                                       {
-                                          FirstName = emp.FirstName,
-                                          LastName = emp.LastName,
-                                          EmployeeID = emp.EmployeeID,
+                                          TimeReportID = tr.TimeReportID,
                                           ProjectID = tr.ProjectID,
                                           ProjectName = p.ProjectName,
                                           StartTime = tr.StartTime,
-                                          EndTime = tr.EndTime
+                                          EndTime = tr.EndTime,
+                                          TotalHoursWorked = Math.Round((tr.EndTime - tr.StartTime).TotalMinutes / 60,2)
                                       };
 
-            ICollection<EmployeeTimeReportDTO> listOfReports = new List<EmployeeTimeReportDTO>();
-            foreach (var i in detailedTimeReports)
-            {
-                var emp = new EmployeeTimeReportDTO();
-                emp.EmployeeID = i.EmployeeID;
-                emp.FirstName = i.FirstName;
-                emp.LastName = i.LastName;
-                emp.ProjectID = i.ProjectID;
-                emp.ProjectName = i.ProjectName;
-                emp.StartTime = i.StartTime;
-                emp.EndTime = i.EndTime;
-
-                listOfReports.Add(emp);
-            }
-            return listOfReports;
-            
-        }
+            return await detailedTimeReports.ToListAsync();
+        
 
 
 
+        //List<EmployeeTimeReportDTO> listOfReports = new List<EmployeeTimeReportDTO>();
+
+        //foreach (var i in detailedTimeReports)
+        //{
+        //    var emp = new EmployeeTimeReportDTO();
+        //    emp.EmployeeID = i.EmployeeID;
+        //    emp.FirstName = i.FirstName;
+        //    emp.LastName = i.LastName;
+        //    emp.ProjectID = i.ProjectID;
+        //    emp.ProjectName = i.ProjectName;
+        //    emp.StartTime = i.StartTime;
+        //    emp.EndTime = i.EndTime;
+
+        //    listOfReports.Add(emp);
+        //}
+        //return Task.FromResult(listOfReports);
+
+    }
 
 
 
 
 
 
-        public async Task<IEnumerable<Employee>> GetEmployeesByProject(int id)
+
+
+
+    public async Task<IEnumerable<Employee>> GetEmployeesByProject(int id)
         {
             var projects = from emp in _db.Employees
                            join pe in _db.ProjectEmployees on emp.EmployeeID equals pe.EmployeeID

@@ -18,6 +18,8 @@ namespace TimeReportAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IRepository<Project>, ProjectRepository>();
+                        
             builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
             builder.Services.AddScoped<ITimeReportRepository, TimeReportRepository>();
 

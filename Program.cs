@@ -25,7 +25,7 @@ namespace TimeReportAPI
 
             builder.Services.AddDbContext<Context>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("Alvin"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Connection"));
             });
 
             var app = builder.Build();

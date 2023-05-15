@@ -24,6 +24,13 @@ namespace TimeReportAPI.Controllers
             var employees = await _EmpRepo.GetEmployeesByProject(id);
             return employees == null ? NotFound() : Ok(employees);
         }
+
+        [HttpGet("GetTimeReportByEmployeeId/{id:int}")]
+        public async Task<IActionResult> GetTimeReportsByEmployee(int id)
+        {
+            var employees = await _EmpRepo.GetTimeReportsByEmployee(id);
+            return employees == null ? NotFound() : Ok(employees);
+        }
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -56,6 +63,7 @@ namespace TimeReportAPI.Controllers
                 var employee = new Employee();
                 employee.FirstName = employeeDTO.FirstName;
                 employee.LastName = employeeDTO.LastName;
+
                 return Ok(await _db.Add(employee));
             }
             catch (Exception ex)
@@ -87,6 +95,31 @@ namespace TimeReportAPI.Controllers
             {
                 return BadRequest();
             }
-        }       
+        }
+        [HttpPost("AddEmployeeToProject")]
+        public async Task<IActionResult> AddEmployeeToProject(int employeeID, int projectID)
+        {
+            try
+            {
+                return Ok(await _EmpRepo.AddRelationEmployeeProject(employeeID, projectID));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding employee to project: {ex.Message}");
+                return BadRequest();
+            }
+        }
+        [HttpDelete("DeleteEmployeeFromProject")]
+        public async Task<IActionResult> DeleteEmployee(int employeeID, int projectID)
+        {
+            try
+            {
+                return Ok(await _EmpRepo.DeleteRelationEmployeeProject(employeeID, projectID));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

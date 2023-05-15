@@ -1,17 +1,75 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
 using TimeReportAPI.Data;
+using TimeReportAPI.DTO;
 using TimeReportAPI.Repositories.Interfaces;
 using TimeReportClassLibrary.Models;
 
 namespace TimeReportAPI.Repositories
 {
-    public class EmployeeRepository : IRepository<Employee>, IEmployeeRepository<Employee>
+    public class EmployeeRepository : Repository<Employee>, IEmployeeRepository<Employee>
     {
         private readonly Context _db;
-        public EmployeeRepository(Context db) 
+
+        public EmployeeRepository(Context db) : base(db)  // calling base constructor here
         {
             _db = db;
+        }
+
+        public async Task<ProjectEmployee> AddRelationEmployeeProject(int empID, int projectID)
+        {
+            var employee = await _db.Employees.FindAsync(empID);
+            var project = await _db.Projects.FindAsync(empID);
+
+            if (employee == null || project == null)
+            {
+                //Add error handling.
+                return null;
+            }
+            var relationToAdd = new ProjectEmployee();
+            relationToAdd.EmployeeID = empID;
+            relationToAdd.ProjectID = projectID;
+
+            await _db.ProjectEmployees.AddAsync(relationToAdd);
+            await _db.SaveChangesAsync();
+
+            return relationToAdd;
+        }
+
+        public async Task<ProjectEmployee> DeleteRelationEmployeeProject(int empID, int projectID)
+        {
+            var relationToDelete = await _db.ProjectEmployees
+                .FirstOrDefaultAsync(pe => pe.EmployeeID == empID && pe.ProjectID == projectID);
+
+            if (relationToDelete == null)
+            {
+                //Handle error
+                return null;
+            }
+
+
+            _db.ProjectEmployees.Remove(relationToDelete);
+            await _db.SaveChangesAsync();
+
+            return relationToDelete;
+        }
+        public async Task<List<EmployeeTimeReportDTO>> GetTimeReportsByEmployee(int id)
+        {
+            var detailedTimeReports = from tr in _db.TimeReports
+                                      join emp in _db.Employees on tr.EmployeeID equals emp.EmployeeID
+                                      where tr.EmployeeID == id
+                                      join p in _db.Projects on tr.ProjectID equals p.ProjectID
+                                      select new EmployeeTimeReportDTO
+                                      {
+                                          TimeReportID = tr.TimeReportID,
+                                          ProjectID = tr.ProjectID,
+                                          ProjectName = p.ProjectName,
+                                          StartTime = tr.StartTime,
+                                          EndTime = tr.EndTime,
+                                          TotalHoursWorked = Math.Round((tr.EndTime - tr.StartTime).TotalMinutes / 60,2)
+                                      };
+
+            return await detailedTimeReports.ToListAsync();
         }
         public async Task<IEnumerable<Employee>> GetEmployeesByProject(int id)
         {
@@ -24,113 +82,7 @@ namespace TimeReportAPI.Repositories
 
             return await projects.ToListAsync();
         }
-        public async Task<Employee> Add(Employee entity)
-        {
-            if (entity.FirstName == null || entity.LastName == null) { return null; }
-            if (entity.FirstName.Length < 2 || entity.LastName.Length < 2) { return null; }
-            
-            try
-            {
-                await _db.AddAsync(entity);
-                await _db.SaveChangesAsync();
-                return entity;
-
-            }
-            catch (Exception e)
-            {
-
-                Console.WriteLine(e.Message);
-                return null;
-            }
-        }
-
-        public async Task<Employee> Delete(int id)
-        {
-
-            try
-            {
-                var employeeToDelete = await _db.Employees.FirstOrDefaultAsync(e => e.EmployeeID == id);
-
-                if (employeeToDelete == null)
-                {
-                    return null;
-                }
-
-                _db.Remove(employeeToDelete);
-                await _db.SaveChangesAsync();
-
-                return employeeToDelete;
-
-            }
-            catch (Exception e)
-            {
-
-                Console.WriteLine(e.Message);
-                return null;
-            }
-        }
-
-        public async Task<Employee> Get(int id)
-        {
-
-            try
-            {
-                var employeeToGet = await _db.Employees.FirstOrDefaultAsync(e => e.EmployeeID == id);
-
-                if (employeeToGet == null)
-                {
-                    return null;
-                }
-
-                return employeeToGet;
-
-            }
-            catch (Exception e)
-            {
-
-                Console.WriteLine(e.Message);
-                return null;
-            }
-        }
-
-        public async Task<IEnumerable<Employee>> GetAll()
-        {
-            try
-            {
-                return await _db.Employees.ToListAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return null;
-            }
-        }
 
 
-
-        public async Task<Employee> Update(Employee entity)
-        {
-            //if (entity.FirstName == null || entity.LastName == null) { return null; }
-            //if (entity.FirstName.Length < 2 || entity.LastName.Length < 2) { return null; }
-            if (entity.EmployeeID == null || entity.EmployeeID == 0) { return null; }
-
-            try
-            {
-                var employeeToUpdate = await _db.Employees.FirstOrDefaultAsync(e=>e.EmployeeID == entity.EmployeeID);
-                employeeToUpdate.FirstName = entity.FirstName;
-                employeeToUpdate.LastName = entity.LastName;
-
-                await _db.SaveChangesAsync();
-
-                return entity;
-
-            }
-            catch (Exception e)
-            {
-
-                Console.WriteLine(e.Message);
-                return null;
-            }
-        }
     }
 }

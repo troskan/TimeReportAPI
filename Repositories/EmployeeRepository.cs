@@ -19,7 +19,7 @@ namespace TimeReportAPI.Repositories
         public async Task<ProjectEmployee> AddRelationEmployeeProject(int empID, int projectID)
         {
             var employee = await _db.Employees.FindAsync(empID);
-            var project = await _db.Projects.FindAsync(empID);
+            var project = await _db.Projects.FindAsync(projectID);
 
             if (employee == null || project == null)
             {

@@ -6,15 +6,15 @@ using TimeReportClassLibrary.Models;
 
 namespace TimeReportAPI.Repositories
 {
-    public class TimeReportRepository : ITimeReportRepository
+    public class TimeReportRepository : Repository<TimeReport>, ITimeReportRepository
     {
         private readonly Context _context;
         private readonly ILogger<TimeReportRepository> _logger;
 
-        public TimeReportRepository(Context context, ILogger<TimeReportRepository> logger)
+        public TimeReportRepository(Context context, ILogger<TimeReportRepository> logger) : base(context)
         {
-            _context = context;
             _logger = logger;
+            _context = context;
         }
 
         public async Task<ActionResult<double>> GetHoursByWeek(int year, int week, int employeeId)

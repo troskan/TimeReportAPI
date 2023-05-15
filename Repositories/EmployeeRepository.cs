@@ -15,6 +15,44 @@ namespace TimeReportAPI.Repositories
         {
             _db = db;
         }
+
+        public async Task<ProjectEmployee> AddRelationEmployeeProject(int empID, int projectID)
+        {
+            var employee = await _db.Employees.FindAsync(empID);
+            var project = await _db.Projects.FindAsync(empID);
+
+            if (employee == null || project == null)
+            {
+                //Add error handling.
+                return null;
+            }
+            var relationToAdd = new ProjectEmployee();
+            relationToAdd.EmployeeID = empID;
+            relationToAdd.ProjectID = projectID;
+
+            await _db.ProjectEmployees.AddAsync(relationToAdd);
+            await _db.SaveChangesAsync();
+
+            return relationToAdd;
+        }
+
+        public async Task<ProjectEmployee> DeleteRelationEmployeeProject(int empID, int projectID)
+        {
+            var relationToDelete = await _db.ProjectEmployees
+                .FirstOrDefaultAsync(pe => pe.EmployeeID == empID && pe.ProjectID == projectID);
+
+            if (relationToDelete == null)
+            {
+                //Handle error
+                return null;
+            }
+
+
+            _db.ProjectEmployees.Remove(relationToDelete);
+            await _db.SaveChangesAsync();
+
+            return relationToDelete;
+        }
         public async Task<List<EmployeeTimeReportDTO>> GetTimeReportsByEmployee(int id)
         {
             var detailedTimeReports = from tr in _db.TimeReports
@@ -44,5 +82,7 @@ namespace TimeReportAPI.Repositories
 
             return await projects.ToListAsync();
         }
+
+
     }
 }

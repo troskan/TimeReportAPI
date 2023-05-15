@@ -95,6 +95,31 @@ namespace TimeReportAPI.Controllers
             {
                 return BadRequest();
             }
-        }       
+        }
+        [HttpPost("AddEmployeeToProject")]
+        public async Task<IActionResult> AddEmployeeToProject(int employeeID, int projectID)
+        {
+            try
+            {
+                return Ok(await _EmpRepo.AddRelationEmployeeProject(employeeID, projectID));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding employee to project: {ex.Message}");
+                return BadRequest();
+            }
+        }
+        [HttpDelete("DeleteEmployeeFromProject")]
+        public async Task<IActionResult> DeleteEmployee(int employeeID, int projectID)
+        {
+            try
+            {
+                return Ok(await _EmpRepo.DeleteRelationEmployeeProject(employeeID, projectID));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

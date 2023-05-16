@@ -24,6 +24,8 @@ namespace TimeReportAPI
             builder.Services.AddScoped<ITimeReportRepository, TimeReportRepository>();
             builder.Services.AddScoped<IRepository<TimeReport>, Repository<TimeReport>>();
 
+            builder.Services.AddScoped<IProjectRepository<Employee>, ProjectRepository>();
+
             builder.Services.AddDbContext<Context>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Connection"));

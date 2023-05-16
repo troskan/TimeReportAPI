@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
+using TimeReportAPI.Repositories;
 using TimeReportAPI.Repositories.Interfaces;
 using TimeReportClassLibrary.Models;
 
@@ -10,9 +11,23 @@ namespace TimeReportAPI.Controllers
     public class ProjectController : ControllerBase
     {
         private IRepository<Project> _repository;
-        public ProjectController(IRepository<Project> repository)
+        private IProjectRepository<Employee> _db;
+        public ProjectController(IRepository<Project> repository, IProjectRepository<Employee> db)
         {
             _repository = repository;
+            _db = db;
+        }
+        [HttpGet("GetAllEmployeesByProjectID")]
+        public async Task<IActionResult> GetAllEmployeesByProjectID(int id)
+        {
+            try
+            {
+                return Ok(await _db.GetAllEmployeesByProject(id));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error while retrieving data from database");
+            }
         }
         [HttpGet]
         public async Task<IActionResult> GetAllProjects()

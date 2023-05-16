@@ -1,63 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks.Dataflow;
 using TimeReportAPI.Data;
 using TimeReportAPI.Repositories.Interfaces;
 using TimeReportClassLibrary.Models;
 
 namespace TimeReportAPI.Repositories
 {
-    public class ProjectRepository : IRepository<Project>
+    public class ProjectRepository : Repository<Project>, IProjectRepository<Employee>
     {
         private readonly Context _db;
-        public ProjectRepository(Context db)
+        public ProjectRepository(Context db) : base(db)
         {
             _db = db;
         }
 
-        public async Task<Project> Add(Project entity)
+        public async Task<List<Employee>> GetAllEmployeesByProject(int id)
         {
-            var addedProject= await _db.Projects.AddAsync(entity);
-            await _db.SaveChangesAsync();
-            return addedProject.Entity;
-        }
+            var employees = from emp in _db.Employees
+                            join pr in _db.ProjectEmployees on emp.EmployeeID equals pr.EmployeeID
+                            where pr.ProjectID == id
+                            select emp;
 
-        public async Task<Project> Delete(int id)
-        {
-            var ProjecttoDelete = await _db.Projects.FirstOrDefaultAsync(p => p.ProjectID == id);
-            if(ProjecttoDelete == null)
-            {
-                return null;
-            }
-            _db.Projects.Remove(ProjecttoDelete);
-            await _db.SaveChangesAsync();
-            return ProjecttoDelete;
-        }
-
-        public async Task<Project> Get(int id)
-        {
-            var FindProjectbyId = await _db.Projects.FirstOrDefaultAsync(p =>p.ProjectID == id);    
-            if (FindProjectbyId == null)
-            {
-                return null;
-            }
-            return FindProjectbyId;
-        }
-
-        public async Task<IEnumerable<Project>> GetAll()
-        {
-            var AllProjects = await _db.Projects.ToListAsync();
-            return AllProjects;
-        }
-
-        public async Task<Project> Update(Project entity)
-        {
-            var UpdatedProject = await _db.Projects.FirstOrDefaultAsync(p=> p.ProjectID==entity.ProjectID);
-            if (UpdatedProject != null)
-            {
-                UpdatedProject.ProjectName = entity.ProjectName;
-                await _db.SaveChangesAsync();
-                return UpdatedProject;
-            }
-            return null;
+            return await employees.ToListAsync();
         }
     }
 }
